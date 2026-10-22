@@ -1,36 +1,38 @@
 "use client";
 
-import { Heart } from "lucide-react";
+import { Heart, Sparkles } from "lucide-react";
 import { Github, Linkedin, Twitter } from "@/components/Icons";
+import { playMicroSound } from "./AudioAmbient";
 
 export default function Footer() {
-  const year = 2025;
+  const year = 2026;
 
   return (
     <footer
-      className="relative py-10 mt-20"
-      style={{ borderTop: "1px solid var(--border-subtle)" }}
+      className="relative py-12 mt-20 z-10 border-t"
+      style={{
+        borderColor: "rgba(255, 255, 255, 0.08)",
+        background: "rgba(5, 5, 8, 0.9)",
+      }}
     >
       <div className="section-container">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-zinc-900">
           {/* Logo */}
-          <div className="flex items-center gap-2">
-            <span className="font-display text-lg font-bold gradient-text">U.</span>
-            <span className="font-mono text-xs" style={{ color: "var(--text-muted)" }}>
-              — Crafted with{" "}
-              <Heart size={10} className="inline" style={{ color: "var(--accent-secondary)" }} />
-              {" "}and GSAP
+          <div className="flex items-center gap-3">
+            <span className="font-display text-xl font-bold gradient-text">U.</span>
+            <span className="font-mono text-xs text-zinc-400">
+              Utkarsh &bull; Full-Stack &amp; Competitive Algorithms
             </span>
           </div>
 
-          {/* Links */}
-          <div className="flex items-center gap-8">
-            {["About", "Projects", "Blog", "Contact"].map((link) => (
+          {/* Nav Links */}
+          <div className="flex flex-wrap items-center justify-center gap-6">
+            {["About", "Projects", "Algorithms", "Skills", "Experience", "Blog", "Contact"].map((link) => (
               <a
                 key={link}
                 href={`#${link.toLowerCase()}`}
-                className="font-mono text-xs tracking-widest uppercase animated-underline"
-                style={{ color: "var(--text-muted)" }}
+                onMouseEnter={() => playMicroSound("hover")}
+                className="font-mono text-xs tracking-wider uppercase text-zinc-400 hover:text-white transition-colors"
               >
                 {link}
               </a>
@@ -40,7 +42,7 @@ export default function Footer() {
           {/* Socials */}
           <div className="flex items-center gap-4">
             {[
-              { icon: Github, href: "https://github.com/", label: "GitHub" },
+              { icon: Github, href: "https://github.com/UtkarshWoc", label: "GitHub" },
               { icon: Linkedin, href: "https://linkedin.com/", label: "LinkedIn" },
               { icon: Twitter, href: "https://twitter.com/", label: "Twitter" },
             ].map(({ icon: Icon, href, label }) => (
@@ -50,25 +52,22 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                className="transition-all duration-300 hover:-translate-y-0.5"
-                style={{ color: "var(--text-muted)" }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.color = "var(--accent-primary)")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.color = "var(--text-muted)")
-                }
+                onMouseEnter={() => playMicroSound("hover")}
+                onClick={() => playMicroSound("click")}
+                className="text-zinc-400 hover:text-purple-400 transition-all hover:-translate-y-1"
               >
-                <Icon size={16} />
+                <Icon size={18} />
               </a>
             ))}
           </div>
         </div>
 
-        <div className="text-center mt-6">
-          <p className="font-mono text-xs" style={{ color: "var(--text-muted)" }}>
-            © {year} Utkarsh. Inspired by Awwwards award-winning portfolios. All rights reserved.
-          </p>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 text-xs font-mono text-zinc-500">
+          <p>© {year} Utkarsh. Engineered with Next.js 15, Three.js, and GSAP.</p>
+          <div className="flex items-center gap-1.5 text-zinc-400">
+            <Sparkles size={13} className="text-yellow-400" />
+            <span>Awwwards Developer SOTD Inspired Architecture</span>
+          </div>
         </div>
       </div>
     </footer>

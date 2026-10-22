@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Sparkles } from "lucide-react";
+import AudioToggle, { playMicroSound } from "./AudioAmbient";
 
 const navLinks = [
   { label: "About", href: "#about" },
   { label: "Projects", href: "#projects" },
+  { label: "Algorithms", href: "#algorithms" },
   { label: "Skills", href: "#skills" },
   { label: "Experience", href: "#experience" },
   { label: "Blog", href: "#blog" },
@@ -21,11 +23,10 @@ export default function Navbar() {
     const onScroll = () => {
       setScrolled(window.scrollY > 40);
 
-      // Active section detection
       const sections = navLinks.map((l) => l.href.replace("#", ""));
       for (const id of sections.reverse()) {
         const el = document.getElementById(id);
-        if (el && window.scrollY >= el.offsetTop - 120) {
+        if (el && window.scrollY >= el.offsetTop - 150) {
           setActive(`#${id}`);
           break;
         }
@@ -43,28 +44,41 @@ export default function Navbar() {
         }`}
       >
         <div className="section-container flex items-center justify-between">
-          {/* Logo */}
-          <a
-            href="#hero"
-            className="font-display text-xl font-bold tracking-tight"
-            style={{ color: "var(--text-primary)" }}
-          >
-            <span className="gradient-text">U.</span>
-            <span className="font-mono text-sm ml-1" style={{ color: "var(--text-secondary)" }}>
-              portfolio
-            </span>
-          </a>
+          {/* Logo & Awwwards badge */}
+          <div className="flex items-center gap-4">
+            <a
+              href="#hero"
+              onMouseEnter={() => playMicroSound("hover")}
+              onClick={() => playMicroSound("click")}
+              className="font-display text-xl font-bold tracking-tight group"
+              style={{ color: "var(--text-primary)" }}
+            >
+              <span className="gradient-text text-2xl font-black">U</span>
+              <span className="text-purple-400">.</span>
+              <span className="font-mono text-xs ml-1.5 opacity-60 group-hover:opacity-100 transition-opacity">
+                dev
+              </span>
+            </a>
+
+            {/* Awwwards Developer pill */}
+            <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-purple-500/20 bg-purple-950/20 text-[10px] font-mono text-purple-300">
+              <Sparkles size={11} className="text-yellow-400" />
+              <span>Awwwards Inspo &bull; Developer Honoree</span>
+            </div>
+          </div>
 
           {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-6 lg:gap-8">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
+                onMouseEnter={() => playMicroSound("hover")}
+                onClick={() => playMicroSound("click")}
                 className={`font-mono text-xs tracking-widest uppercase transition-all duration-300 animated-underline ${
                   active === link.href
-                    ? "text-[var(--accent-primary)]"
-                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                    ? "text-[var(--accent-teal)] font-medium"
+                    : "text-[var(--text-secondary)] hover:text-white"
                 }`}
               >
                 {link.label}
@@ -72,50 +86,60 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* CTA Button */}
-          <a
-            href="/resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden md:inline-flex items-center gap-2 px-4 py-2 text-xs font-mono tracking-widest uppercase border transition-all duration-300 hover:bg-[var(--accent-primary)] hover:border-[var(--accent-primary)] hover:text-white"
-            style={{
-              borderColor: "var(--accent-primary)",
-              color: "var(--accent-primary)",
-              borderRadius: "2px",
-            }}
-          >
-            Resume ↗
-          </a>
+          {/* Right controls: Ambient Audio + Let's Talk CTA */}
+          <div className="flex items-center gap-3">
+            <AudioToggle />
 
-          {/* Mobile hamburger */}
-          <button
-            className="md:hidden"
-            style={{ color: "var(--text-primary)" }}
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
-          >
-            {menuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+            <a
+              href="#contact"
+              onMouseEnter={() => playMicroSound("hover")}
+              onClick={() => playMicroSound("click")}
+              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 text-xs font-mono tracking-wider transition-all duration-300 hover:scale-105"
+              style={{
+                background: "linear-gradient(135deg, var(--accent-primary), #6366f1)",
+                color: "#ffffff",
+                borderRadius: "9999px",
+                boxShadow: "0 0 20px rgba(144, 71, 255, 0.3)",
+              }}
+            >
+              Let&apos;s Talk ↳
+            </a>
+
+            {/* Mobile hamburger */}
+            <button
+              className="md:hidden p-1.5 text-zinc-300 hover:text-white"
+              onClick={() => {
+                playMicroSound("click");
+                setMenuOpen(!menuOpen);
+              }}
+              aria-label="Toggle menu"
+            >
+              {menuOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
+          </div>
         </div>
       </nav>
 
-      {/* Mobile menu */}
+      {/* Mobile full-screen menu */}
       <div
-        className={`fixed inset-0 z-40 flex flex-col justify-center items-center gap-10 transition-all duration-500 ${
+        className={`fixed inset-0 z-40 flex flex-col justify-center items-center gap-8 transition-all duration-500 ${
           menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
-        style={{ background: "rgba(5, 5, 8, 0.97)" }}
+        style={{ background: "rgba(5, 5, 10, 0.98)", backdropFilter: "blur(25px)" }}
       >
         {navLinks.map((link, i) => (
           <a
             key={link.href}
             href={link.href}
-            onClick={() => setMenuOpen(false)}
-            className="font-display text-4xl font-bold transition-all duration-300 hover:text-[var(--accent-primary)]"
+            onClick={() => {
+              playMicroSound("click");
+              setMenuOpen(false);
+            }}
+            className="font-serif italic text-3xl sm:text-4xl transition-all duration-300 hover:text-[var(--accent-teal)]"
             style={{
               color: "var(--text-primary)",
-              transitionDelay: `${i * 0.05}s`,
-              transform: menuOpen ? "translateY(0)" : "translateY(20px)",
+              transitionDelay: `${i * 0.04}s`,
+              transform: menuOpen ? "translateY(0)" : "translateY(15px)",
             }}
           >
             {link.label}

@@ -3,50 +3,55 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowRight, Clock, BookOpen } from "lucide-react";
+import { ArrowRight, Clock, BookOpen, Terminal, Sparkles } from "lucide-react";
+import { playMicroSound } from "./AudioAmbient";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const posts = [
   {
-    title: "Building a Real-Time Collaborative Editor with CRDT and Yjs",
+    title: "Demystifying CRDTs: Building Conflict-Free Real-Time State in TypeScript",
     excerpt:
-      "A deep dive into operational transformation and CRDT algorithms, and how I built a conflict-free collaborative editor from scratch using Yjs.",
-    date: "Oct 15, 2026",
+      "A deep dive into State-based vs Operation-based CRDTs, LWW registers, and vector clocks. How we achieved sub-10ms peer synchronization with zero merge conflicts.",
+    date: "Feb 18, 2026",
     readTime: "12 min read",
-    tags: ["Systems", "WebRTC", "CRDT"],
-    color: "var(--accent-primary)",
+    tags: ["Distributed Systems", "CRDT", "TypeScript"],
+    color: "#00f5d4",
     slug: "#",
+    featured: true,
   },
   {
-    title: "GSAP ScrollTrigger Mastery: From Basics to Award-Winning Animations",
+    title: "Awwwards-Caliber Motion: Orchestrating GSAP Timelines with WebGL Shaders",
     excerpt:
-      "Everything I learned studying Awwwards-winning sites — the scroll choreography, pin tricks, and performance secrets that make animations buttery smooth.",
-    date: "Sep 28, 2026",
-    readTime: "8 min read",
-    tags: ["GSAP", "Animation", "Frontend"],
-    color: "var(--accent-teal)",
+      "Behind the scenes of cinematic web experiences: coordinating GSAP ScrollTrigger physics with Three.js vertex shaders without CPU lockups or frame drops.",
+    date: "Jan 28, 2026",
+    readTime: "9 min read",
+    tags: ["WebGL", "Three.js", "GSAP 3", "Creative"],
+    color: "#9047ff",
     slug: "#",
+    featured: false,
   },
   {
-    title: "Segment Trees Explained: From CP to Production Code",
+    title: "From Codeforces to Production: When Competitive Algorithms Save the Day",
     excerpt:
-      "How segment trees that I learned solving Codeforces problems found their way into a real-time analytics system at work. Theory meets practice.",
-    date: "Sep 10, 2026",
+      "How Segment Trees with Lazy Propagation and Tarjan's Strongly Connected Components algorithm powered a high-throughput geospatial query engine at 100k QPS.",
+    date: "Dec 14, 2025",
     readTime: "15 min read",
-    tags: ["DSA", "C++", "Backend"],
-    color: "#a78bfa",
+    tags: ["Algorithms", "C++", "Data Structures"],
+    color: "#ffbe0b",
     slug: "#",
+    featured: false,
   },
   {
-    title: "Next.js App Router: Patterns I Wish I Knew Earlier",
+    title: "Next.js 15 App Router Architecture: Zero-Hydration Patterns That Scale",
     excerpt:
-      "After building 10+ App Router projects, here are the architectural patterns, data fetching strategies, and gotchas that save me hours every project.",
-    date: "Aug 22, 2026",
-    readTime: "10 min read",
-    tags: ["Next.js", "React", "Performance"],
-    color: "var(--accent-secondary)",
+      "Architectural insights from shipping 10+ production applications: optimal Server/Client component boundary placement, streaming Suspense, and edge caching.",
+    date: "Nov 30, 2025",
+    readTime: "11 min read",
+    tags: ["Next.js", "React 19", "Architecture"],
+    color: "#ff6584",
     slug: "#",
+    featured: false,
   },
 ];
 
@@ -56,17 +61,17 @@ export default function BlogSection() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
-        ".blog-card",
-        { opacity: 0, y: 50 },
+        ".blog-card-item",
+        { opacity: 0, y: 40 },
         {
           opacity: 1,
           y: 0,
           duration: 0.6,
           stagger: 0.1,
-          ease: "power3.out",
+          ease: "power2.out",
           scrollTrigger: {
-            trigger: ".blog-grid",
-            start: "top 80%",
+            trigger: sectionRef.current,
+            start: "top 75%",
           },
         }
       );
@@ -76,67 +81,57 @@ export default function BlogSection() {
   }, []);
 
   return (
-    <section id="blog" ref={sectionRef} className="relative py-32">
+    <section id="blog" ref={sectionRef} className="relative py-28 z-10">
       <div className="section-container">
-        {/* Label */}
+        {/* Section label */}
         <div className="flex items-center gap-4 mb-4">
-          <span
-            className="font-mono text-xs tracking-widest uppercase"
-            style={{ color: "var(--accent-primary)" }}
-          >
-            05 / Blog
+          <span className="font-mono text-xs tracking-widest uppercase text-teal-400">
+            06 / Technical Publications
           </span>
           <div className="flex-1 h-px" style={{ background: "var(--border-subtle)" }} />
         </div>
 
-        <div className="flex items-end justify-between mb-16">
+        {/* Section Header */}
+        <div className="mb-14">
           <h2
-            className="font-display text-5xl md:text-6xl font-bold leading-tight"
+            className="font-display text-4xl sm:text-5xl md:text-6xl font-bold leading-tight"
             style={{ color: "var(--text-primary)" }}
           >
-            Thoughts &amp;{" "}
-            <span className="gradient-text">Writings</span>
+            Engineering{" "}
+            <span className="font-serif italic font-normal text-purple-300">
+              Essays
+            </span>
           </h2>
-          <a
-            href="#"
-            className="hidden md:flex items-center gap-2 font-mono text-sm animated-underline"
-            style={{ color: "var(--text-secondary)" }}
-          >
-            All Posts <ArrowRight size={14} />
-          </a>
+          <p className="text-zinc-400 max-w-xl text-sm md:text-base mt-2">
+            In-depth breakdowns on distributed systems, creative WebGL graphics, and algorithmic engineering.
+          </p>
         </div>
 
-        <div className="blog-grid grid md:grid-cols-2 gap-6">
-          {posts.map((post, i) => (
+        {/* Blog Posts Grid */}
+        <div className="grid md:grid-cols-2 gap-6">
+          {posts.map((post) => (
             <a
               key={post.title}
               href={post.slug}
-              className="blog-card group glass overflow-hidden block transition-all duration-500 hover:-translate-y-2"
+              onMouseEnter={() => playMicroSound("hover")}
+              onClick={() => playMicroSound("click")}
+              className="blog-card-item group glass p-7 rounded-xl border transition-all duration-500 hover:-translate-y-2 flex flex-col justify-between"
               style={{
-                borderRadius: "8px",
-                gridColumn: i === 0 ? "span 2 / span 2" : "auto",
+                borderColor: "rgba(255, 255, 255, 0.08)",
+                background: "rgba(10, 10, 18, 0.7)",
               }}
             >
-              {/* Top color bar */}
-              <div
-                className="h-1 w-full transition-all duration-500"
-                style={{
-                  background: `linear-gradient(90deg, ${post.color}, transparent)`,
-                }}
-              />
-
-              <div className="p-6">
+              <div>
                 {/* Tags */}
                 <div className="flex flex-wrap gap-2 mb-4">
                   {post.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="tag"
+                      className="font-mono text-[10px] px-2.5 py-0.5 rounded-full"
                       style={{
                         color: post.color,
-                        borderColor: `${post.color}44`,
-                        background: `${post.color}10`,
-                        fontSize: "0.65rem",
+                        background: `${post.color}15`,
+                        border: `1px solid ${post.color}35`,
                       }}
                     >
                       {tag}
@@ -144,40 +139,33 @@ export default function BlogSection() {
                   ))}
                 </div>
 
-                <h3
-                  className="font-display text-xl font-bold mb-3 leading-snug transition-colors duration-300 group-hover:text-[var(--accent-primary)]"
-                  style={{ color: "var(--text-primary)" }}
-                >
+                <h3 className="font-display text-xl sm:text-2xl font-bold mb-3 leading-snug text-white group-hover:text-purple-300 transition-colors">
                   {post.title}
                 </h3>
 
-                <p
-                  className="text-sm leading-relaxed mb-6"
-                  style={{ color: "var(--text-secondary)" }}
-                >
+                <p className="text-zinc-400 text-sm leading-relaxed mb-6 font-normal">
                   {post.excerpt}
                 </p>
+              </div>
 
-                <div
-                  className="flex items-center justify-between"
-                  style={{ color: "var(--text-muted)" }}
-                >
-                  <div className="flex items-center gap-4">
-                    <span className="flex items-center gap-1.5 font-mono text-xs">
-                      <Clock size={12} />
-                      {post.readTime}
-                    </span>
-                    <span className="flex items-center gap-1.5 font-mono text-xs">
-                      <BookOpen size={12} />
-                      {post.date}
-                    </span>
-                  </div>
-                  <ArrowRight
-                    size={16}
-                    className="transition-transform duration-300 group-hover:translate-x-2"
-                    style={{ color: post.color }}
-                  />
+              {/* Meta row */}
+              <div className="pt-4 border-t border-zinc-800/80 flex items-center justify-between text-xs font-mono text-zinc-500">
+                <div className="flex items-center gap-3">
+                  <span className="flex items-center gap-1">
+                    <Clock size={12} className="text-teal-400" />
+                    {post.readTime}
+                  </span>
+                  <span>&bull;</span>
+                  <span>{post.date}</span>
                 </div>
+
+                <span
+                  className="inline-flex items-center gap-1 font-semibold group-hover:translate-x-1 transition-transform"
+                  style={{ color: post.color }}
+                >
+                  Read Article
+                  <ArrowRight size={13} />
+                </span>
               </div>
             </a>
           ))}

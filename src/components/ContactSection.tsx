@@ -3,8 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Send, Mail, MapPin } from "lucide-react";
+import { Send, Mail, MapPin, CheckCircle2, Clock, Sparkles } from "lucide-react";
 import { Github, Linkedin, Twitter } from "@/components/Icons";
+import { playMicroSound } from "./AudioAmbient";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -21,23 +22,23 @@ export default function ContactSection() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
-        ".contact-left",
-        { opacity: 0, x: -60 },
+        ".contact-left-anim",
+        { opacity: 0, x: -50 },
         {
           opacity: 1,
           x: 0,
-          duration: 0.9,
+          duration: 0.8,
           ease: "power3.out",
           scrollTrigger: { trigger: sectionRef.current, start: "top 75%" },
         }
       );
       gsap.fromTo(
-        ".contact-right",
-        { opacity: 0, x: 60 },
+        ".contact-right-anim",
+        { opacity: 0, x: 50 },
         {
           opacity: 1,
           x: 0,
-          duration: 0.9,
+          duration: 0.8,
           ease: "power3.out",
           scrollTrigger: { trigger: sectionRef.current, start: "top 75%" },
         }
@@ -48,281 +49,248 @@ export default function ContactSection() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    playMicroSound("click");
     setSending(true);
-    await new Promise((r) => setTimeout(r, 1500));
+    await new Promise((r) => setTimeout(r, 1200));
     setSending(false);
     setSent(true);
+    playMicroSound("success");
     setFormState({ name: "", email: "", message: "" });
   };
 
   return (
-    <section id="contact" ref={sectionRef} className="relative py-32">
-      {/* Background glow */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 40% at 50% 80%, rgba(108,99,255,0.05), transparent)",
-        }}
-      />
-
+    <section id="contact" ref={sectionRef} className="relative py-28 z-10">
       <div className="section-container relative z-10">
         {/* Label */}
         <div className="flex items-center gap-4 mb-4">
-          <span
-            className="font-mono text-xs tracking-widest uppercase"
-            style={{ color: "var(--accent-primary)" }}
-          >
-            06 / Contact
+          <span className="font-mono text-xs tracking-widest uppercase text-teal-400">
+            07 / Transmission
           </span>
           <div className="flex-1 h-px" style={{ background: "var(--border-subtle)" }} />
         </div>
 
-        <h2
-          className="font-display text-5xl md:text-6xl font-bold mb-4 leading-tight"
-          style={{ color: "var(--text-primary)" }}
-        >
-          Let&apos;s{" "}
-          <span className="gradient-text">Connect</span>
-        </h2>
-        <p
-          className="text-lg mb-16 max-w-2xl"
-          style={{ color: "var(--text-secondary)" }}
-        >
-          I&apos;m always open to new opportunities, interesting projects, or just a good 
-          tech conversation. Drop me a message!
-        </p>
+        {/* Header */}
+        <div className="mb-14">
+          <h2
+            className="font-display text-4xl sm:text-5xl md:text-6xl font-bold leading-tight"
+            style={{ color: "var(--text-primary)" }}
+          >
+            Initiate a{" "}
+            <span className="font-serif italic font-normal text-purple-300">
+              Conversation
+            </span>
+          </h2>
+          <p className="text-zinc-400 max-w-xl text-sm md:text-base mt-2">
+            Interested in hiring for a mission-critical role, commissioning a bespoke high-end platform, or discussing competitive algorithms? Send a message.
+          </p>
+        </div>
 
-        <div className="grid lg:grid-cols-2 gap-16">
-          {/* Left — info */}
-          <div className="contact-left space-y-8">
-            {/* Location */}
-            <div className="flex items-center gap-3">
-              <div
-                className="w-10 h-10 glass flex items-center justify-center"
-                style={{ borderRadius: "8px" }}
-              >
-                <MapPin size={18} style={{ color: "var(--accent-primary)" }} />
+        <div className="grid lg:grid-cols-12 gap-12 lg:gap-16">
+          {/* Left info column */}
+          <div className="contact-left-anim lg:col-span-5 space-y-6">
+            {/* Status card */}
+            <div className="glass p-6 rounded-xl border border-zinc-800 bg-zinc-950/60">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-teal-500" />
+                </span>
+                <span className="font-mono text-sm font-bold text-teal-300">
+                  Direct Inquiries Open &bull; 2026
+                </span>
               </div>
-              <div>
-                <div
-                  className="font-mono text-xs tracking-widest"
-                  style={{ color: "var(--text-muted)" }}
-                >
-                  Based in
+              <p className="text-xs text-zinc-400 leading-relaxed font-mono">
+                Average reply time: under 12 hours. Open for senior engineering roles, freelance contracts, and technical advisory.
+              </p>
+            </div>
+
+            {/* Direct details */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-3.5 p-3.5 rounded-xl glass border border-zinc-800/80">
+                <div className="w-9 h-9 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+                  <Mail size={16} />
                 </div>
-                <div className="font-semibold" style={{ color: "var(--text-primary)" }}>
-                  India 🇮🇳
+                <div>
+                  <div className="font-mono text-[10px] uppercase text-zinc-500">
+                    Primary Dispatch
+                  </div>
+                  <a
+                    href="mailto:utkarsh.engr@outlook.com"
+                    onMouseEnter={() => playMicroSound("hover")}
+                    className="font-mono text-sm text-zinc-200 hover:text-teal-300 transition-colors"
+                  >
+                    utkarsh.engr@outlook.com
+                  </a>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3.5 p-3.5 rounded-xl glass border border-zinc-800/80">
+                <div className="w-9 h-9 rounded-lg bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400">
+                  <MapPin size={16} />
+                </div>
+                <div>
+                  <div className="font-mono text-[10px] uppercase text-zinc-500">
+                    Location &amp; Coordinates
+                  </div>
+                  <div className="font-mono text-sm text-zinc-200">
+                    Bengaluru, India (IST / UTC+5:30)
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3.5 p-3.5 rounded-xl glass border border-zinc-800/80">
+                <div className="w-9 h-9 rounded-lg bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-yellow-400">
+                  <Clock size={16} />
+                </div>
+                <div>
+                  <div className="font-mono text-[10px] uppercase text-zinc-500">
+                    Working Mode
+                  </div>
+                  <div className="font-mono text-sm text-zinc-200">
+                    Remote-first worldwide &bull; Asynchronous
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Email */}
-            <div className="flex items-center gap-3">
-              <div
-                className="w-10 h-10 glass flex items-center justify-center"
-                style={{ borderRadius: "8px" }}
-              >
-                <Mail size={18} style={{ color: "var(--accent-teal)" }} />
+            {/* Social channels */}
+            <div className="pt-2">
+              <div className="font-mono text-[11px] uppercase tracking-wider text-zinc-500 mb-3">
+                Verified Cryptographic &amp; Social Links
               </div>
-              <div>
-                <div
-                  className="font-mono text-xs tracking-widest"
-                  style={{ color: "var(--text-muted)" }}
-                >
-                  Email
-                </div>
-                <a
-                  href="mailto:utkarsh@example.com"
-                  className="font-semibold animated-underline"
-                  style={{ color: "var(--text-primary)" }}
-                >
-                  utkarsh@example.com
-                </a>
-              </div>
-            </div>
-
-            {/* Socials */}
-            <div>
-              <div
-                className="font-mono text-xs tracking-widest uppercase mb-4"
-                style={{ color: "var(--text-muted)" }}
-              >
-                Find me on
-              </div>
-              <div className="flex gap-4">
+              <div className="flex gap-3">
                 {[
-                  {
-                    icon: Github,
-                    href: "https://github.com/",
-                    label: "GitHub",
-                    color: "var(--text-secondary)",
-                  },
-                  {
-                    icon: Linkedin,
-                    href: "https://linkedin.com/",
-                    label: "LinkedIn",
-                    color: "#0077b5",
-                  },
-                  {
-                    icon: Twitter,
-                    href: "https://twitter.com/",
-                    label: "Twitter",
-                    color: "#1da1f2",
-                  },
-                ].map(({ icon: Icon, href, label, color }) => (
+                  { icon: Github, href: "https://github.com/UtkarshWoc", label: "GitHub" },
+                  { icon: Linkedin, href: "https://linkedin.com/", label: "LinkedIn" },
+                  { icon: Twitter, href: "https://twitter.com/", label: "Twitter / X" },
+                ].map(({ icon: Icon, href, label }) => (
                   <a
                     key={label}
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={label}
-                    className="w-12 h-12 glass flex items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:scale-110"
-                    style={{ borderRadius: "8px" }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.querySelector("svg")!.style.color = color)
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.querySelector("svg")!.style.color = "var(--text-secondary)")
-                    }
+                    onMouseEnter={() => playMicroSound("hover")}
+                    onClick={() => playMicroSound("click")}
+                    className="w-11 h-11 rounded-lg glass border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-white hover:border-purple-400 hover:bg-purple-950/30 transition-all hover:-translate-y-1"
                   >
-                    <Icon size={20} style={{ color: "var(--text-secondary)" }} />
+                    <Icon size={18} />
                   </a>
                 ))}
               </div>
             </div>
-
-            {/* Availability card */}
-            <div
-              className="glass p-6"
-              style={{ borderRadius: "8px" }}
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <span
-                  className="w-3 h-3 rounded-full"
-                  style={{
-                    background: "var(--accent-teal)",
-                    boxShadow: "0 0 10px var(--accent-teal)",
-                    animation: "pulse 2s infinite",
-                  }}
-                />
-                <span
-                  className="font-mono text-sm font-bold"
-                  style={{ color: "var(--accent-teal)" }}
-                >
-                  Available for Work
-                </span>
-              </div>
-              <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
-                I&apos;m currently open to full-time roles, freelance projects, and 
-                interesting collaborations. Response time: within 24 hours.
-              </p>
-            </div>
           </div>
 
-          {/* Right — form */}
-          <div className="contact-right">
-            <form onSubmit={handleSubmit} className="space-y-5">
-              {[
-                {
-                  id: "contact-name",
-                  label: "Name",
-                  type: "text",
-                  key: "name",
-                  placeholder: "John Doe",
-                },
-                {
-                  id: "contact-email",
-                  label: "Email",
-                  type: "email",
-                  key: "email",
-                  placeholder: "john@example.com",
-                },
-              ].map((field) => (
-                <div key={field.key}>
-                  <label
-                    htmlFor={field.id}
-                    className="block font-mono text-xs tracking-widest uppercase mb-2"
-                    style={{ color: "var(--text-muted)" }}
+          {/* Right form column */}
+          <div className="contact-right-anim lg:col-span-7">
+            <div className="glass p-7 sm:p-8 rounded-2xl border border-zinc-800/80 bg-zinc-950/70">
+              {sent ? (
+                <div className="py-12 text-center">
+                  <div className="w-14 h-14 rounded-full bg-teal-500/20 border border-teal-500/40 text-teal-300 flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle2 size={28} />
+                  </div>
+                  <h3 className="font-display text-2xl font-bold text-white mb-2">
+                    Transmission Dispatched
+                  </h3>
+                  <p className="text-zinc-400 font-mono text-sm max-w-md mx-auto mb-6">
+                    Thank you for reaching out. Your transmission has been recorded. I will get back to you promptly.
+                  </p>
+                  <button
+                    onClick={() => setSent(false)}
+                    className="px-6 py-2.5 rounded-full border border-teal-500/40 text-teal-300 font-mono text-xs hover:bg-teal-950/30 transition-colors"
                   >
-                    {field.label}
-                  </label>
-                  <input
-                    id={field.id}
-                    type={field.type}
-                    placeholder={field.placeholder}
-                    value={formState[field.key as "name" | "email"]}
-                    onChange={(e) =>
-                      setFormState((p) => ({ ...p, [field.key]: e.target.value }))
-                    }
-                    required
-                    className="w-full px-4 py-3 glass font-mono text-sm outline-none transition-all duration-300 focus:border-[var(--accent-primary)]"
-                    style={{
-                      borderRadius: "4px",
-                      color: "var(--text-primary)",
-                      background: "rgba(10,10,18,0.5)",
-                    }}
-                  />
+                    Send Another Message
+                  </button>
                 </div>
-              ))}
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label
+                        htmlFor="contact-name"
+                        className="block font-mono text-[11px] uppercase tracking-wider text-zinc-400 mb-2"
+                      >
+                        Your Name
+                      </label>
+                      <input
+                        id="contact-name"
+                        type="text"
+                        required
+                        value={formState.name}
+                        onChange={(e) =>
+                          setFormState({ ...formState, name: e.target.value })
+                        }
+                        placeholder="Ada Lovelace"
+                        className="w-full px-4 py-3 rounded-lg bg-zinc-900/90 border border-zinc-800 text-white font-mono text-sm placeholder:text-zinc-600 focus:outline-none focus:border-purple-400 transition-colors"
+                      />
+                    </div>
 
-              <div>
-                <label
-                  htmlFor="contact-message"
-                  className="block font-mono text-xs tracking-widest uppercase mb-2"
-                  style={{ color: "var(--text-muted)" }}
-                >
-                  Message
-                </label>
-                <textarea
-                  id="contact-message"
-                  placeholder="Tell me about your project..."
-                  rows={6}
-                  value={formState.message}
-                  onChange={(e) =>
-                    setFormState((p) => ({ ...p, message: e.target.value }))
-                  }
-                  required
-                  className="w-full px-4 py-3 glass font-mono text-sm outline-none transition-all duration-300 focus:border-[var(--accent-primary)] resize-none"
-                  style={{
-                    borderRadius: "4px",
-                    color: "var(--text-primary)",
-                    background: "rgba(10,10,18,0.5)",
-                  }}
-                />
-              </div>
+                    <div>
+                      <label
+                        htmlFor="contact-email"
+                        className="block font-mono text-[11px] uppercase tracking-wider text-zinc-400 mb-2"
+                      >
+                        Email Address
+                      </label>
+                      <input
+                        id="contact-email"
+                        type="email"
+                        required
+                        value={formState.email}
+                        onChange={(e) =>
+                          setFormState({ ...formState, email: e.target.value })
+                        }
+                        placeholder="ada@domain.com"
+                        className="w-full px-4 py-3 rounded-lg bg-zinc-900/90 border border-zinc-800 text-white font-mono text-sm placeholder:text-zinc-600 focus:outline-none focus:border-purple-400 transition-colors"
+                      />
+                    </div>
+                  </div>
 
-              <button
-                type="submit"
-                id="contact-submit"
-                disabled={sending || sent}
-                className="w-full flex items-center justify-center gap-3 py-4 font-mono text-sm tracking-wider text-white transition-all duration-300 hover:scale-[1.02] hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed"
-                style={{
-                  background: sent
-                    ? "linear-gradient(135deg, var(--accent-teal), #00a88a)"
-                    : "linear-gradient(135deg, var(--accent-primary), #8b5cf6)",
-                  borderRadius: "4px",
-                  boxShadow: "0 0 30px rgba(108,99,255,0.3)",
-                }}
-              >
-                {sending ? (
-                  <>
-                    <div
-                      className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
-                      style={{ animation: "spin 1s linear infinite" }}
+                  <div>
+                    <label
+                      htmlFor="contact-message"
+                      className="block font-mono text-[11px] uppercase tracking-wider text-zinc-400 mb-2"
+                    >
+                      Project Specifications / Message
+                    </label>
+                    <textarea
+                      id="contact-message"
+                      rows={5}
+                      required
+                      value={formState.message}
+                      onChange={(e) =>
+                        setFormState({ ...formState, message: e.target.value })
+                      }
+                      placeholder="Tell me about your architectural goals, timeline, or engineering challenge..."
+                      className="w-full px-4 py-3 rounded-lg bg-zinc-900/90 border border-zinc-800 text-white font-mono text-sm placeholder:text-zinc-600 focus:outline-none focus:border-purple-400 transition-colors resize-none"
                     />
-                    Sending...
-                  </>
-                ) : sent ? (
-                  <>✓ Message Sent!</>
-                ) : (
-                  <>
-                    <Send size={16} />
-                    Send Message
-                  </>
-                )}
-              </button>
-            </form>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={sending}
+                    onMouseEnter={() => playMicroSound("hover")}
+                    className="w-full py-4 rounded-lg font-mono text-sm tracking-wider text-white font-semibold transition-all duration-300 hover:scale-[1.01] hover:shadow-xl flex items-center justify-center gap-2 disabled:opacity-50"
+                    style={{
+                      background: "linear-gradient(135deg, var(--accent-primary), #4f46e5)",
+                      boxShadow: "0 0 25px rgba(144, 71, 255, 0.3)",
+                    }}
+                  >
+                    {sending ? (
+                      <span className="flex items-center gap-2">
+                        <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                        Encrypting &amp; Dispatching...
+                      </span>
+                    ) : (
+                      <>
+                        <Send size={15} />
+                        Transmit Message ↳
+                      </>
+                    )}
+                  </button>
+                </form>
+              )}
+            </div>
           </div>
         </div>
       </div>

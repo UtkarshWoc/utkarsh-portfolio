@@ -3,15 +3,16 @@
 :root {
   --bg-primary: #050508;
   --bg-secondary: #0a0a12;
-  --accent-primary: #6c63ff;
+  --accent-primary: #9047ff;
   --accent-secondary: #ff6584;
-  --accent-teal: #00d4aa;
+  --accent-teal: #00f5d4;
+  --accent-purple: #9047ff;
   --text-primary: #f0f0ff;
-  --text-secondary: #8888aa;
-  --text-muted: #44445a;
-  --border-subtle: rgba(108, 99, 255, 0.12);
-  --glow-primary: rgba(108, 99, 255, 0.4);
-  --glow-teal: rgba(0, 212, 170, 0.3);
+  --text-secondary: #8b8ba7;
+  --text-muted: #4e4e66;
+  --border-subtle: rgba(144, 71, 255, 0.16);
+  --glow-primary: rgba(144, 71, 255, 0.45);
+  --glow-teal: rgba(0, 245, 212, 0.35);
 }
 
 * {
@@ -49,13 +50,14 @@ body {
 
 /* Selection */
 ::selection {
-  background: rgba(108, 99, 255, 0.3);
+  background: rgba(144, 71, 255, 0.35);
   color: white;
 }
 
 /* Custom utility classes */
 .font-mono { font-family: 'Space Mono', monospace; }
 .font-display { font-family: 'Syne', sans-serif; }
+.font-serif { font-family: 'Cormorant Garamond', Georgia, serif; }
 
 /* Glow effects */
 .glow-primary {
