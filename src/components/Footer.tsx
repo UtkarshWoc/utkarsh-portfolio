@@ -1,9 +1,10 @@
 "use client";
 
-import { Github, Linkedin, Twitter, Heart } from "lucide-react";
+import { Heart } from "lucide-react";
+import { Github, Linkedin, Twitter } from "@/components/Icons";
 
 export default function Footer() {
-  const year = new Date().getFullYear();
+  const year = 2025;
 
   return (
     <footer

@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
@@ -8,16 +7,8 @@ import ExperienceSection from "@/components/ExperienceSection";
 import BlogSection from "@/components/BlogSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
-
-// Client-only components
-const ParticleBackground = dynamic(
-  () => import("@/components/ParticleBackground"),
-  { ssr: false }
-);
-const CustomCursor = dynamic(
-  () => import("@/components/CustomCursor"),
-  { ssr: false }
-);
+import ParticleBackground from "@/components/ParticleBackground";
+import CustomCursor from "@/components/CustomCursor";
 
 export default function Home() {
   return (
@@ -54,6 +45,7 @@ export default function Home() {
 
       <ContactSection />
 
+      {/* Footer */}
       <Footer />
     </main>
   );

@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Send, Github, Linkedin, Twitter, Mail, MapPin } from "lucide-react";
+import { Send, Mail, MapPin } from "lucide-react";
+import { Github, Linkedin, Twitter } from "@/components/Icons";
 
 gsap.registerPlugin(ScrollTrigger);
 

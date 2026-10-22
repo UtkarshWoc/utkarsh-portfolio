@@ -2,7 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { ArrowDown, Github, Linkedin, Twitter, Mail } from "lucide-react";
+import { ArrowDown, Mail } from "lucide-react";
+import { Github, Linkedin, Twitter } from "@/components/Icons";
 
 const socials = [
   { icon: Github, href: "https://github.com/", label: "GitHub" },
