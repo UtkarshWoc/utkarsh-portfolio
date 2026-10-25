@@ -1,0 +1,17 @@
+{
+  "name": "utkarsh-portfolio",
+  "version": "1.0.0",
+  "description": "Utkarsh Shukla - Software Development Engineer Portfolio",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "portfolio",
+    "software-engineer",
+    "utkarsh-shukla"
+  ],
+  "author": "Utkarsh Shukla",
+  "license": "ISC"
+}
